@@ -56,7 +56,7 @@ language // ko
 | `ru` | 러시사어 |
 | `it` | 이탈리아어 |
 
-[공식 문서](https://developers.naver.com/docs/papago/papago-detectlangs-overview.md#%EC%96%B8%EC%96%B4-%EA%B0%90%EC%A7%80-%EA%B0%9C%EC%9A%94) 참조
+[공식 문서](https://developers.naver.com/docs/papago/papago-detectlangs-overview.md#%EC%96%B8%EC%96%B4-%EA%B0%90%EC%A7%80-%EA%B0%9C%EC%9A%94) 참고
 
 `TranslationResult`
 
@@ -108,6 +108,7 @@ function response(room, msg, sender, isGroupChat, replier) {
             return false;
 
         }
+
     }
 }
 ```
