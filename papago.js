@@ -25,7 +25,8 @@ Util.toHmacMD5 = function(message, keyString) {
 };
 
 const URL = {
-    DETECT: 'https://papago.naver.com/apis/langs/dect'
+    DETECT: 'https://papago.naver.com/apis/langs/dect',
+    TRANSLATE: 'https://papago.naver.com/apis/n2mt/translate'
 };
 
 const Papago = (function() {
@@ -84,6 +85,48 @@ const Papago = (function() {
         if(language === 'unk') language = null;
 
         return language;
+
+    }
+
+    Papago.prototype.translate = function(text, source, target) {
+
+        if(typeof text !== 'string')
+            throw new TypeError('Parameter text must be string');
+        if(typeof source !== 'string')
+            throw new TypeError('Parameter source must be string');
+        if(typeof target !== 'string')
+            throw new TypeError('Parameter target must be string');
+
+        const keySet = generateKey(URL.TRANSLATE);
+        const connection = Jsoup.connect(URL.TRANSLATE);
+
+        connection.method(Connection.Method.POST);
+        connection.header('Authorization', keySet.key);
+        connection.header('Timestamp', keySet.time);
+
+        connection.data('locale', 'ko');
+        connection.data('dict', true);
+        connection.data('dictDisplay', 20);
+        connection.data('honorific', false);
+        connection.data('instant', false);
+        connection.data('paging', false);
+        connection.data('source', source);
+        connection.data('target', target);
+        connection.data('text', text);
+
+        connection.ignoreContentType(true);
+        connection.ignoreHttpErrors(true);
+
+        const response = connection.execute();
+
+        if(response.statusCode() !== 200) {
+            throw new Error('Translation failed');
+        }
+
+        const body = response.body();
+        const data = JSON.parse(body);
+
+        return data;
 
     }
 
