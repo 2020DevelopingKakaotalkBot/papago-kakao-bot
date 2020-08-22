@@ -27,7 +27,7 @@ function response(room, msg, sender, isGroupChat, replier) {
         const query = msg.split(' ').slice(1).join(' ');
         const language = papago.detectLanguage(query);
         if(language === null) {
-            replier.reply('알 수 없는 언어이에요.');
+            replier.reply('무슨 언어인지 잘 모르겠어요.');
             return false;
         }
         if(language === 'ko') {
