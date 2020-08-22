@@ -126,7 +126,23 @@ const Papago = (function() {
         const body = response.body();
         const data = JSON.parse(body);
 
-        return data;
+        let sounds = null;
+
+        if(data.tilt) {
+            sounds = [];
+            const tlits = data.tlit.message.tlitResult;
+            for (let tilt of tlits) sounds.push(tilt.phoneme);
+            sounds = sounds.join(' ');
+        }
+
+        const result = {
+            translated: data.translatedText,
+            source: data.srcLangType,
+            target: data.tarLangType,
+            sound: sounds
+        };
+
+        return result;
 
     }
 
