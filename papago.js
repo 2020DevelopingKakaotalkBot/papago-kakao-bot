@@ -103,6 +103,7 @@ const Papago = (function() {
         connection.method(Connection.Method.POST);
         connection.header('Authorization', keySet.key);
         connection.header('Timestamp', keySet.time);
+        connection.header('Accept-Language', 'ko');
 
         connection.data('locale', 'ko');
         connection.data('dict', true);
@@ -128,10 +129,10 @@ const Papago = (function() {
 
         let sounds = null;
 
-        if(data.tilt) {
+        if(data.tlit) {
             sounds = [];
             const tlits = data.tlit.message.tlitResult;
-            for (let tilt of tlits) sounds.push(tilt.phoneme);
+            for (let tlit of tlits) sounds.push(tlit.phoneme);
             sounds = sounds.join(' ');
         }
 
