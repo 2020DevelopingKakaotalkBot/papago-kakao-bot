@@ -29,7 +29,7 @@ const URL = {
     TRANSLATE: 'https://papago.naver.com/apis/n2mt/translate'
 };
 
-const Papago = (function() {
+module.exports = (function() {
 
     function Papago() {
 
@@ -159,5 +159,3 @@ const Papago = (function() {
     return Papago;
 
 })();
-
-module.exports = Papago;
