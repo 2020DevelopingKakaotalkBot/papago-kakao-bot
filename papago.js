@@ -1,6 +1,7 @@
 importPackage(java.util);
 importPackage(javax.crypto);
 importPackage(javax.crypto.spec);
+importPackage(org.jsoup);
 
 const Util = {};
 Util.getTime = function() { return new Date().getTime() };
@@ -14,7 +15,7 @@ Util.toHmacMD5 = function(message, keyString) {
     const bytes = mac.doFinal(message.getBytes('ASCII'));
     const encoded = Base64.getEncoder().encode(bytes);
     const base64 = new java.lang.String(encoded);
-    return base64.toString();
+    return base64;
 };
 
 const URL = {
@@ -43,6 +44,29 @@ const Papago = (function() {
         const key = 'PPG ' + chip + ':' + Util.toHmacMD5(chip + '\n' + url + '\n' + time, version);
 
         return { time: time, key: key };
+    }
+
+    Papago.prototype.detectLanguage = function(string) {
+        if(typeof string !== 'string') {
+            throw new TypeError('Parameter type must be string');
+        }
+        const connection = Jsoup.connect(URL.DETECT);
+        const keySet = generateKey(URL.DETECT);
+        connection.method(Connection.Method.POST);
+        connection.header('Authorization', keySet.key);
+        connection.header('Timestamp', keySet.time);
+        connection.data('query', string);
+        connection.ignoreContentType(true);
+        connection.ignoreHttpErrors(true);
+        const response = connection.execute();
+        if(response.statusCode() !== 200) {
+            throw new Error('Language detection failed');
+        }
+        const body = response.body();
+        const data = JSON.parse(body);
+        let language = data.langCode;
+        if(language === 'unk') language = null;
+        return language;
     }
 
     return Papago;
