@@ -127,20 +127,29 @@ const Papago = (function() {
         const body = response.body();
         const data = JSON.parse(body);
 
-        let sounds = null;
+        let sound = null;
+        let sourceSound = null;
 
         if(data.tlit) {
-            sounds = [];
+            sound = [];
             const tlits = data.tlit.message.tlitResult;
-            for (let tlit of tlits) sounds.push(tlit.phoneme);
-            sounds = sounds.join(' ');
+            for (let tlit of tlits) sound.push(tlit.phoneme);
+            sound = sound.join(' ');
+        }
+
+        if(data.tlitSrc) {
+            sourceSound = [];
+            const srcTlits = data.tlitSrc.message.tlitResult;
+            for (let tlit of srcTlits) sourceSound.push(tlit.phoneme);
+            sourceSound = sourceSound.join(' ');
         }
 
         const result = {
             translated: data.translatedText,
             source: data.srcLangType,
             target: data.tarLangType,
-            sound: sounds
+            sound: sound,
+            sourceSound: sourceSound
         };
 
         return result;
