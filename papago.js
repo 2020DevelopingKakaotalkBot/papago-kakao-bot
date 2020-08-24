@@ -144,15 +144,13 @@ module.exports = (function() {
             sourceSound = sourceSound.join(' ');
         }
 
-        const result = {
+        return {
             translated: data.translatedText,
             source: data.srcLangType,
             target: data.tarLangType,
             sound: sound,
             sourceSound: sourceSound
         };
-
-        return result;
 
     }
 
